@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'menlo';
+    src: url('/static/fonts/Menlo-Regular.ttf') format('truetype');
+  }
+  
+  #tablature {
+    font-family: 'menlo', sans-serif;
+  }
+  

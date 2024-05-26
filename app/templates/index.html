@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI_Xplorer</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#25252D] p-10 h-[100vh]">
+    <div class="w-full h-[100%] bg-white rounded-3xl">
+        <div class="h-[14%] w-full rounded-b-2xl rounded-3xl shadow-xl flex justify-between items-center">
+            <img src="/static/imgs/logo.png" alt="logo" class="h-16 rounded-full float-left ml-5">
+            <img src="/static/imgs/notes.png" alt="logo" class="h-16 float-right mr-1">
+        </div>
+        <div class="w-full h-[86%] flex flex-col justify-end pb-4 px-4 space-y-4">
+            <div class="message_output h-full flex items-center w-full">
+                <div class="flex flex-col w-full items-center space-y-4">
+                    <div class="message bg-[#D5D6DB] rounded-2xl p-4 w-full">
+                        <p id="tablature" class="text-sm">
+                        </p>
+                    </div>
+                    <button class="bg-[#FF7000] rounded-2xl text-white font-bold text-sm p-4">
+                        Download MIDI File
+                    </button>
+                </div>
+            </div>
+            <div class="w-full flex space-x-4">
+                <div class="flex flex-col items-center">
+                    <p>LLM Temperature</p>
+                    <input id="temperature" type="text" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4" value="0.3">
+                </div>
+                <div class="flex flex-col items-center">
+                    <p>LLM Top_p</p>
+                    <input id="top_p" type="text" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4" value="0.95">
+                </div>
+                <div class="flex flex-col items-center">
+                    <p>Tab Style</p>
+                    <select id="style" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4">
+                        <option value="Bossa Nova">Bossa Nova</option>
+                        <option value="Funk">Funk</option>
+                        <option value="Jazz">Jazz</option>
+                        <option value="Rock" selected>Rock</option>
+                        <option value="Singer-Songwriter">Singer-Songwriter</option>
+                    </select>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p>Tab Key</p>
+                    <select id="key" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4">
+                        <option value="A">A</option>
+                        <option value="Ab">Ab</option>
+                        <option value="B">B</option>
+                        <option value="Bb">Bb</option>
+                        <option value="C" selected>C</option>
+                        <option value="C#">C#</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="Eb">Eb</option>
+                        <option value="F">F</option>
+                        <option value="F#">F#</option>
+                        <option value="G">G</option>
+                        <option value="Gb">Gb</option>
+                    </select>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p>Tempo</p>
+                    <input id="tempo" type="number" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4" value="120">
+                </div>
+
+            </div>
+            <div class="h-[14%] flex items-center justify-between space-x-4">
+                <textarea id="message-input" class="bg-[#D5D6DB] w-full h-full rounded-2xl p-4 resize-none"></textarea>
+                <button id="send-button" class="aspect-square h-full">
+                    <img src="/static/imgs/send.png" alt="Send" style="height: 100%; width: 100%;">
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatBox = document.getElementById("chat-box");
+            const messageInput = document.getElementById("message-input");
+            const sendButton = document.getElementById("send-button");
+
+            const tempoInput = document.getElementById("tempo");
+            const temperatureInput = document.getElementById("temperature");
+            const topPInput = document.getElementById("top_p");
+            const styleSelect = document.getElementById("style");
+            const keySelect = document.getElementById("key");
+
+            const downloadButton = document.querySelector("button");
+            downloadButton.style.display = "none";  // Hide the button initially
+
+
+            sendButton.addEventListener("click", sendMessage);
+            messageInput.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message === "") return;
+                
+                const temperature = temperatureInput.value;
+                const topP = topPInput.value;
+                const style = styleSelect.value;
+                const key = keySelect.value;
+                const tempo = tempoInput.value;
+                // appendMessage("You: " + message);
+                messageInput.value = "";
+
+                fetch("/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        temperature: temperature,
+                        top_p: topP,
+                        style: style,
+                        key: key,
+                        tempo: tempo
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // appendMessage(data.message);
+                        const tablatureElement = document.getElementById("tablature");
+
+                        tablatureElement.innerHTML = data.tablature;
+
+                        if (data.midi_url) {
+                            downloadButton.setAttribute("onclick", `window.location.href='${data.midi_url}'`);
+                            downloadButton.style.display = "block";  // Show the button when midi_url is available
+                        } else {
+                            downloadButton.style.display = "none";  // Hide the button if midi_url is not available
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+
+
+        });
+    </script>
+</body>
+
+</html>
