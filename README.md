@@ -3,7 +3,10 @@
 
 ## Project overview
 
-We purpose a fine-tuned LLM for generating guitar tabs in ASCII format with specific styles.
+We purpose a fine-tuned LLM for generating guitar TABs in ASCII format with specific styles.
+
+[What is a guitar TAB](https://youtu.be/pQC3JsbgaTw?si=euwlcUedFJwMBTJq)
+
 
 ## Files 
 
