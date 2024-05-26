@@ -1,5 +1,5 @@
+![logo](images/logo.png)
 # Repo of the AI_Xplorer team for the Mistral Hackathlon
-
 
 ## Project overview
 
