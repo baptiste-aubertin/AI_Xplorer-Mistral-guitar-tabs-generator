@@ -11,7 +11,6 @@ class Tabs(object):
 
     def preprocess(self):
         content = [x.strip() for x in self.lines if len(x.strip())>5]
-        print(content)
         for symbol in self.symbols:
             for i,line in enumerate(content):
                 content[i] = line.replace(symbol,"-")

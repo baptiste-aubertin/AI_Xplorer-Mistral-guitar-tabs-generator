@@ -187,12 +187,12 @@ def tablaturize_jams(jam, save_path=None):
         s += 1
 
     # plot Beat
-    # anno_b = jam.search(namespace='beat_position')[0]
-    # for b in anno_b.data:
-    #     t = b.time
-    #     plt.axvline(t, linestyle='dotted', color='k', alpha=0.5)
-    #     if int(b.value['position']) == 1:
-    #         plt.axvline(t, linestyle='-', color='k', alpha=0.8)
+    anno_b = jam.search(namespace='beat_position')[0]
+    for b in anno_b.data:
+        t = b.time
+        plt.axvline(t, linestyle='dotted', color='k', alpha=0.5)
+        if int(b.value['position']) == 1:
+            plt.axvline(t, linestyle='-', color='k', alpha=0.8)
 
     # handle_list.append(mlines.Line2D([], [], color='k',
     #                                  label='downbeat'))

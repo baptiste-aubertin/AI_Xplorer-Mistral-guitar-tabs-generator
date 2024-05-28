@@ -10,9 +10,10 @@ We purpose a fine-tuned LLM for generating guitar TABs in ASCII format with spec
 
 ## Files 
 
-`mistral-finetuning.ipynb` Notebook for finetuning mistral
+`mistral-finetuning.ipynb` Notebook for finetuning mistral 7B with QLoRa
 
 `GuitarSet` Open source dataset with guitar recordings, we preprocessed it to have ASCII guitar tabs
+`GuitarSet/process_datas.ipynb` Notebook wher we preprocessed the datas
     *Q. Xi, R. Bittner, J. Pauwels, X. Ye, and J. P. Bello, "​Guitarset: A Dataset for Guitar Transcription", in 19th International Society for Music Information Retrieval Conference, Paris, France, Sept. 2018.*
 
 `app` Web app for inference
